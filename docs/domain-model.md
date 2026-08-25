@@ -39,6 +39,7 @@ Table RepairJobs {
   catalog_id int [ref: > Catalog.id]
   charged_price decimal 
 }
+```
 
 ## 3. Lifecycle of a Repair
 **States a repair goes through:**
