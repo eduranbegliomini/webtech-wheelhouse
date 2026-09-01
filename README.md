@@ -28,4 +28,4 @@ You can view the original project specifications and wireframes in the [docs/ fo
    bin/dev
 
 4. View the app:
-   Open your browser and navigate to http://localhost:300
+   Open your browser and navigate to http://localhost:3000
