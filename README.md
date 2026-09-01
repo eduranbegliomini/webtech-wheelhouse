@@ -1,15 +1,35 @@
-# Wheelhouse: Bicycle Repair Shop
+# Wheelhouse - Lab 4
 
-Wheelhouse is a neighbourhood bicycle repair shop management system. It transitions the shop from a paper-tag and notebook system to a digital screen-based tracking system.
+**Student Name:** Elena Durán Begliomini
+**Course/Section:** Web Technologies
 
-## Who uses it
-* **Mechanics:** To track repairs, log assessments, add specific jobs, and take pre-repair photos.
-* **Counter Staff (Daughter):** To quickly answer customer phone calls about repair statuses and promised dates.
-* **Owner:** To maintain the catalog of prices and keep historical records of bike repairs.
-* **Customers:** To view a public, read-only list of service prices.
+## Description
+This is a Ruby on Rails 8 application for a neighborhood bicycle repair shop called Wheelhouse. It uses a PostgreSQL database and Bootstrap for styling.
 
-## Documentation
-* [User Stories](docs/user-stories.md)
-* [Domain Model](docs/domain-model.md)
-* [Decisions Record](docs/decisions.md)
-* [Wireframes](docs/wireframes.md)
+## System Requirements
+* Ruby 3.x / 4.x
+* Ruby on Rails 8
+* PostgreSQL (Running on localhost)
+* Node.js & npm
+
+## Setup Instructions
+
+1. **Install dependencies:**
+   ```bash
+   bundle install
+   npm install
+   ```
+
+2. **Database Setup:**
+   Ensure PostgreSQL is running, then create the database:
+   ```bash
+   bin/rails db:create
+   ```
+
+3. **Compile CSS and Start the Server:**
+   ```bash
+   bin/dev
+   ```
+
+4. **View the app:**
+   Open your browser and navigate to `http://localhost:3000`

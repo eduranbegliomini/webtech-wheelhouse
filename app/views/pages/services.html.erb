@@ -1,0 +1,23 @@
+<h1>Service Prices</h1>
+<p class="lead">What a tune-up (and everything else) costs.</p>
+
+<div class="row mt-4">
+  <div class="col-12 col-md-8">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Job Description</th>
+          <th class="text-end">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @jobs.each do |job| %>
+          <tr>
+            <td><%= job[:name] %></td>
+            <td class="text-end">$<%= job[:price] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
