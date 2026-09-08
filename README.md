@@ -22,10 +22,8 @@ You can view the original project specifications and wireframes in the [docs/ fo
    npm install
 
 2. Database Setup:
-   Ensure PostgreSQL is running, then create the database, load the schema, and seed the data:
-   bin/rails db:create
-   bin/rails db:migrate
-   bin/rails db:seed
+   Ensure PostgreSQL is running, then use this single command to create the database, load the schema, and seed the data:
+   bin/rails db:setup
 
 3. Compile CSS and Start the Server:
    bin/dev
