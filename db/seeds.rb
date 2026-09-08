@@ -51,13 +51,13 @@ b10 = Bike.create!(customer_id: customers[8].id, make: "Scott", model: "Spark", 
 b11 = Bike.create!(customer_id: customers[1].id, make: "Yeti", model: "SB130", color: "Turquoise", serial_number: "YT666777")
 b12 = Bike.create!(customer_id: customers[2].id, make: "Pinarello", model: "Dogma", color: "Red", serial_number: "PN888999")
 
-r1 = Repair.create!(bike_id: b1.id, employee_id: m1.id, state: "In Progress", promised_on: 2.days.ago.to_date, mechanic_notes: "Waiting on parts")
+r1 = Repair.create!(bike_id: b1.id, employee_id: m1.id, state: "In Progress", promised_on: 2.days.ago.to_date)
 RepairService.create!(repair_id: r1.id, service_id: s1.id, charged_price: s1.price - 10.0) # Descuento exigido!
 
 r2 = Repair.create!(bike_id: b2.id, employee_id: m2.id, state: "Picked Up", promised_on: 1.day.ago.to_date, handed_back_at: 1.day.ago, customer_answer: "Approved", created_at: 1.day.ago.beginning_of_day + 10.hours)
 RepairService.create!(repair_id: r2.id, service_id: s3.id, charged_price: s3.price)
 
-r3 = Repair.create!(bike_id: b3.id, employee_id: m3.id, state: "Declined", promised_on: 1.day.from_now.to_date, customer_answer: "Too expensive right now", mechanic_notes: "Needs full overhaul")
+r3 = Repair.create!(bike_id: b3.id, employee_id: m3.id, state: "Declined", promised_on: 1.day.from_now.to_date, customer_answer: "Too expensive right now")
 RepairService.create!(repair_id: r3.id, service_id: s2.id, charged_price: s2.price)
 
 r4 = Repair.create!(bike_id: b4.id, employee_id: m1.id, state: "Picked Up", promised_on: 1.month.ago.to_date, handed_back_at: 1.month.ago, customer_answer: "Approved", created_at: 1.month.ago - 2.days)
@@ -67,7 +67,7 @@ r5 = Repair.create!(bike_id: b4.id, employee_id: m2.id, state: "Received", promi
 RepairService.create!(repair_id: r5.id, service_id: s4.id, charged_price: s4.price)
 
 r6 = Repair.create!(bike_id: b5.id, employee_id: m3.id, state: "Picked Up", promised_on: 2.years.ago.to_date, handed_back_at: 2.years.ago + 1.day, customer_answer: "Approved", created_at: 2.years.ago)
-RepairService.create!(repair_id: r6.id, service_id: s1.id, charged_price: 45.00) # Precio antiguo simulado
+RepairService.create!(repair_id: r6.id, service_id: s1.id, charged_price: 45.00) 
 
 r7 = Repair.create!(bike_id: b6.id, employee_id: nil, state: "Received", promised_on: 3.days.from_now.to_date)
 RepairService.create!(repair_id: r7.id, service_id: s5.id, charged_price: s5.price)
@@ -75,13 +75,13 @@ RepairService.create!(repair_id: r7.id, service_id: s5.id, charged_price: s5.pri
 r8 = Repair.create!(bike_id: b7.id, employee_id: m1.id, state: "Estimating", promised_on: 4.days.from_now.to_date)
 RepairService.create!(repair_id: r8.id, service_id: s6.id, charged_price: s6.price)
 
-r9 = Repair.create!(bike_id: b8.id, employee_id: m2.id, state: "Waiting for Approval", promised_on: 3.days.from_now.to_date, mechanic_notes: "Found crack in rim")
+r9 = Repair.create!(bike_id: b8.id, employee_id: m2.id, state: "Waiting for Approval", promised_on: 3.days.from_now.to_date)
 RepairService.create!(repair_id: r9.id, service_id: s16.id, charged_price: s16.price)
 
 r10 = Repair.create!(bike_id: b9.id, employee_id: m3.id, state: "Approved", promised_on: 2.days.from_now.to_date, customer_answer: "Yes, go ahead")
 RepairService.create!(repair_id: r10.id, service_id: s8.id, charged_price: s8.price)
 
-r11 = Repair.create!(bike_id: b10.id, employee_id: m1.id, state: "Completed", promised_on: Date.current, customer_answer: "Approved", mechanic_notes: "Ready for pickup")
+r11 = Repair.create!(bike_id: b10.id, employee_id: m1.id, state: "Completed", promised_on: Date.current, customer_answer: "Approved")
 RepairService.create!(repair_id: r11.id, service_id: s10.id, charged_price: s10.price)
 
 r12 = Repair.create!(bike_id: b11.id, employee_id: m2.id, state: "In Progress", promised_on: 1.day.from_now.to_date, customer_answer: "Approved")

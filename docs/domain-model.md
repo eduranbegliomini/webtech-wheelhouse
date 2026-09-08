@@ -5,39 +5,60 @@
 
 ## 2. DBML Code
 ```dbml
-Table Customers {
-  id int [pk]
-  name varchar
-  phone varchar
+Table customers {
+  id bigint [pk]
+  name varchar [not null]
+  phone varchar [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
-Table Bikes {
-  id int [pk]
-  customer_id int [ref: > Customers.id]
-  make varchar
-  model varchar
-  serial_number varchar 
+Table bikes {
+  id bigint [pk]
+  customer_id bigint [ref: > customers.id, not null]
+  make varchar [not null]
+  model varchar [not null]
+  color varchar [not null]
+  serial_number varchar [not null, unique]
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
-Table Catalog {
-  id int [pk]
-  job_name varchar
-  base_price decimal
+Table services {
+  id bigint [pk]
+  name varchar [not null, unique]
+  price decimal(8,2) [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
-Table Repairs {
-  id int [pk]
-  bike_id int [ref: > Bikes.id]
-  promised_date date
-  status varchar 
-  mechanic_notes text
+Table employees {
+  id bigint [pk]
+  name varchar [not null]
+  role varchar [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 
-Table RepairJobs {
-  id int [pk]
-  repair_id int [ref: > Repairs.id]
-  catalog_id int [ref: > Catalog.id]
-  charged_price decimal 
+Table repairs {
+  id bigint [pk]
+  bike_id bigint [ref: > bikes.id, not null]
+  employee_id bigint [ref: > employees.id]
+  state varchar [not null, default: 'Received']
+  promised_on date
+  handed_back_at datetime
+  customer_answer varchar
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table repair_services {
+  id bigint [pk]
+  repair_id bigint [ref: > repairs.id, not null]
+  service_id bigint [ref: > services.id, not null]
+  charged_price decimal(8,2) [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
 }
 ```
 

@@ -1,4 +1,4 @@
-# Wheelhouse - Lab 4
+# Wheelhouse - Lab 5
 
 **Student Name:** Elena Durán Begliomini
 **Course/Section:** Web Technologies
@@ -11,8 +11,9 @@ You can view the original project specifications and wireframes in the [docs/ fo
 ## System Requirements
 * Ruby 3.x / 4.x
 * Ruby on Rails 8
-* PostgreSQL (Running on localhost)
 * Node.js & npm
+* **PostgreSQL** (Running on localhost). 
+  * **Expected Role:** The application expects a PostgreSQL role that matches your operating system username (or the default `postgres` role) with `CREATEDB` permissions to create the database.
 
 ## Setup Instructions
 
@@ -21,8 +22,10 @@ You can view the original project specifications and wireframes in the [docs/ fo
    npm install
 
 2. Database Setup:
-   Ensure PostgreSQL is running, then create the database:
+   Ensure PostgreSQL is running, then create the database, load the schema, and seed the data:
    bin/rails db:create
+   bin/rails db:migrate
+   bin/rails db:seed
 
 3. Compile CSS and Start the Server:
    bin/dev
