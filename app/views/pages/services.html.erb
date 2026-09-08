@@ -13,8 +13,8 @@
       <tbody>
         <% @jobs.each do |job| %>
           <tr>
-            <td><%= job[:name] %></td>
-            <td class="text-end">$<%= job[:price] %></td>
+            <td><%= job.name %></td>
+            <td class="text-end">$<%= job.price %></td>
           </tr>
         <% end %>
       </tbody>
