@@ -1,0 +1,27 @@
+<% content_for :title, @employee.name %>
+
+<h1><%= @employee.name %></h1>
+<p class="lead"><strong>Role:</strong> <%= @employee.role %></p>
+
+<h3 class="mt-4">Assigned Repairs</h3>
+<% if @employee.repairs.any? %>
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Repair ID</th>
+        <th>Bike & Owner</th>
+        <th>Status</th>
+        <th>Promised On</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @employee.repairs %>
+    </tbody>
+  </table>
+<% else %>
+  <p>This employee has no assigned repairs.</p>
+<% end %>
+
+<div class="mt-4">
+  <%= link_to "Back to Staff", employees_path, class: "btn btn-outline-secondary" %>
+</div>

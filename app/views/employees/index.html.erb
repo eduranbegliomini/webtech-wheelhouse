@@ -1,0 +1,17 @@
+<h1>Staff Members</h1>
+
+<% if @employees.any? %>
+  <table class="table table-striped mt-4">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @employees %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No employees found.</p>
+<% end %>

@@ -1,0 +1,59 @@
+<% content_for :title, "Repair ##{@repair.id}" %>
+
+<h1>Repair Ticket #<%= @repair.id %></h1>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header bg-dark text-white">Details</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Bike:</strong> <%= link_to "#{@repair.bike.make} #{@repair.bike.model}", bike_path(@repair.bike) %></li>
+        <li class="list-group-item"><strong>Customer:</strong> <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer) %></li>
+        <li class="list-group-item"><strong>Mechanic:</strong> <%= @repair.employee ? link_to(@repair.employee.name, employee_path(@repair.employee)) : "Unassigned" %></li>
+        <li class="list-group-item"><strong>State:</strong> <span class="badge bg-secondary"><%= @repair.state %></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header bg-dark text-white">Timeline</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Promised On:</strong> <%= @repair.promised_on ? @repair.promised_on.to_fs(:long) : "Not set" %></li>
+        <li class="list-group-item"><strong>Handed Back At:</strong> <%= @repair.handed_back_at ? @repair.handed_back_at.to_fs(:long_ordinal) : "Not handed back yet" %></li>
+        <li class="list-group-item"><strong>Customer Answer:</strong> <%= @repair.customer_answer.presence || "None yet" %></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h3 class="mt-4">Services Charged</h3>
+<% if @repair.repair_services.any? %>
+  <table class="table table-bordered mt-3">
+    <thead class="table-light">
+      <tr>
+        <th>Service Performed</th>
+        <th class="text-end">Amount Charged</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @repair.repair_services.each do |rs| %>
+        <tr>
+          <td><%= link_to rs.service.name, service_path(rs.service) %></td>
+          <td class="text-end"><%= number_to_currency(rs.charged_price) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr class="table-dark">
+        <td><strong>Total Invoice</strong></td>
+        <td class="text-end"><strong><%= number_to_currency(@repair.repair_services.sum(&:charged_price)) %></strong></td>
+      </tr>
+    </tfoot>
+  </table>
+<% else %>
+  <p>No services have been added to this repair yet.</p>
+<% end %>
+
+<div class="mt-4">
+  <%= link_to "Back to Repairs", repairs_path, class: "btn btn-outline-secondary" %>
+</div>

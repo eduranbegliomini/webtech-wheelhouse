@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_08_172243) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_142330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_172243) do
     t.string "model", null: false
     t.string "serial_number", null: false
     t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_bikes_on_customer_id"
     t.index ["serial_number"], name: "index_bikes_on_serial_number", unique: true
   end
 
@@ -45,6 +46,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_172243) do
     t.bigint "repair_id", null: false
     t.bigint "service_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["repair_id"], name: "index_repair_services_on_repair_id"
+    t.index ["service_id"], name: "index_repair_services_on_service_id"
   end
 
   create_table "repairs", force: :cascade do |t|
@@ -57,6 +60,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_172243) do
     t.date "promised_on"
     t.string "state", default: "Received", null: false
     t.datetime "updated_at", null: false
+    t.index ["bike_id"], name: "index_repairs_on_bike_id"
+    t.index ["employee_id"], name: "index_repairs_on_employee_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -66,4 +71,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_172243) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_services_on_name", unique: true
   end
+
+  add_foreign_key "bikes", "customers"
+  add_foreign_key "repair_services", "repairs"
+  add_foreign_key "repair_services", "services"
+  add_foreign_key "repairs", "bikes"
+  add_foreign_key "repairs", "employees"
 end

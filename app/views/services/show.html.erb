@@ -1,0 +1,8 @@
+<% content_for :title, @service.name %>
+
+<h1><%= @service.name %></h1>
+<p class="lead"><strong>Base Price:</strong> <%= number_to_currency(@service.price) %></p>
+
+<div class="mt-4">
+  <%= link_to "Back to Services", services_path, class: "btn btn-outline-secondary" %>
+</div>

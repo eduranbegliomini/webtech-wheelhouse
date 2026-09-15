@@ -1,0 +1,19 @@
+<h1>Bikes</h1>
+
+<% if @bikes.any? %>
+  <table class="table table-striped mt-4">
+    <thead class="table-dark">
+      <tr>
+        <th>Make & Model</th>
+        <th>Color</th>
+        <th>Owner</th>
+        <th>Serial Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @bikes %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No bikes found in the database.</p>
+<% end %>

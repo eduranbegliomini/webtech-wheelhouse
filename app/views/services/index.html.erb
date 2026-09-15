@@ -1,0 +1,18 @@
+<h1>Services Catalog</h1>
+<p class="lead">What a tune-up (and everything else) costs.</p>
+
+<% if @services.any? %>
+  <table class="table table-striped mt-4">
+    <thead class="table-dark">
+      <tr>
+        <th>Job Description</th>
+        <th>Base Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @services %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No services found in the catalog.</p>
+<% end %>
