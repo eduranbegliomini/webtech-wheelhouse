@@ -22,6 +22,9 @@
   <p>This customer does not have any bikes registered yet.</p>
 <% end %>
 
-<div class="mt-4">
-  <%= link_to "Back to Customers", customers_path, class: "btn btn-outline-secondary" %>
+<div class="mt-4 d-flex gap-2">
+  <%= link_to "Edit", edit_customer_path(@customer), class: "btn btn-primary" %>
+  <%= button_to "Delete", @customer, method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{@customer.name}?" }, class: "btn btn-danger" %>
+  <%= link_to "Register New Bike", new_bike_path(customer_id: @customer.id), class: "btn btn-success" %>
+  <%= link_to "Back", customers_path, class: "btn btn-outline-secondary" %>
 </div>

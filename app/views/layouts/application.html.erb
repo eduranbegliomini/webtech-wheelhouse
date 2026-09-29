@@ -10,6 +10,7 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
+    <!-- Navbar Gris -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container">
         <%= link_to "Wheelhouse", root_path, class: "navbar-brand" %>
@@ -29,7 +30,15 @@
       </div>
     </nav>
 
+    <!-- Contenido y Mensajes Flash -->
     <div class="container">
+      <% flash.each do |type, message| %>
+        <div class="alert alert-<%= type == 'alert' ? 'danger' : 'success' %> alert-dismissible fade show" role="alert">
+          <%= message %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+
       <%= yield %>
     </div>
   </body>

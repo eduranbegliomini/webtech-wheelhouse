@@ -1,5 +1,7 @@
 <h1>Repairs</h1>
 
+<%= link_to "Add New Repair", new_repair_path, class: "btn btn-success mb-3" %>
+
 <% if @repairs.any? %>
   <table class="table table-hover mt-4">
     <thead class="table-dark">

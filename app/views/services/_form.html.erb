@@ -1,0 +1,27 @@
+<%= form_with model: @service do |f| %>
+  <% if @service.errors.any? %>
+    <div class="alert alert-danger">
+      <h5>Please fix the following <%= pluralize(@service.errors.count, "error") %>:</h5>
+      <ul>
+        <% @service.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: "form-control #{'is-invalid' if @service.errors[:name].any?}" %>
+    <div class="invalid-feedback"><%= @service.errors[:name].join(", ") %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :price, "Price ($)", class: "form-label" %>
+    <%= f.number_field :price, step: 0.01, class: "form-control #{'is-invalid' if @service.errors[:price].any?}" %>
+    <div class="invalid-feedback"><%= @service.errors[:price].join(", ") %></div>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+  <%= link_to "Cancel", services_path, class: "btn btn-outline-secondary" %>
+<% end %>

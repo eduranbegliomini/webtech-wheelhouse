@@ -1,5 +1,7 @@
 <h1>Customers</h1>
 
+<%= link_to "Add New Customer", new_customer_path, class: "btn btn-success mb-3" %>
+
 <% if @customers.any? %>
   <table class="table table-striped mt-4">
     <thead class="table-dark">

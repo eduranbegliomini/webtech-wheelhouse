@@ -1,0 +1,79 @@
+<%= form_with model: @repair do |f| %>
+  <% if @repair.errors.any? %>
+    <div class="alert alert-danger">
+      <h5>Please fix the following <%= pluralize(@repair.errors.count, "error") %>:</h5>
+      <ul>
+        <% @repair.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= f.label :bike_id, "Bike", class: "form-label" %>
+      <%= f.collection_select :bike_id, Bike.includes(:customer).all, :id, ->(b) { "#{b.make} #{b.model} (#{b.customer.name})" }, { include_blank: "Select a bike" }, class: "form-select #{'is-invalid' if @repair.errors[:bike_id].any?}" %>
+      <div class="invalid-feedback"><%= @repair.errors[:bike_id].join(", ") %></div>
+    </div>
+    
+    <div class="col-md-6 mb-3">
+      <%= f.label :employee_id, "Mechanic", class: "form-label" %>
+      <%= f.collection_select :employee_id, Employee.all, :id, :name, { include_blank: "Unassigned" }, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <%= f.label :state, class: "form-label" %>
+      <%= f.select :state, Repair.states.keys.map { |s| [s.titleize, s] }, {}, class: "form-select" %>
+    </div>
+    <div class="col-md-4 mb-3">
+      <%= f.label :promised_on, class: "form-label" %>
+      <%= f.date_field :promised_on, class: "form-control #{'is-invalid' if @repair.errors[:promised_on].any?}" %>
+      <div class="invalid-feedback"><%= @repair.errors[:promised_on].join(", ") %></div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <%= f.label :handed_back_at, class: "form-label" %>
+      <%= f.date_field :handed_back_at, class: "form-control #{'is-invalid' if @repair.errors[:handed_back_at].any?}" %>
+      <div class="invalid-feedback"><%= @repair.errors[:handed_back_at].join(", ") %></div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :customer_answer, class: "form-label" %>
+    <%= f.text_field :customer_answer, class: "form-control #{'is-invalid' if @repair.errors[:customer_answer].any?}" %>
+    <div class="invalid-feedback"><%= @repair.errors[:customer_answer].join(", ") %></div>
+  </div>
+
+  <h4>Services Charged</h4>
+  <div class="card p-3 mb-4 bg-light">
+    <%= f.fields_for :repair_services do |line_f| %>
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <%= line_f.label :service_id, "Service", class: "form-label visually-hidden" %>
+          <%= line_f.collection_select :service_id, Service.all, :id, :name, { include_blank: "No service" }, class: "form-select" %>
+        </div>
+        <div class="col-md-4">
+          <%= line_f.label :charged_price, "Price", class: "form-label visually-hidden" %>
+          <%= line_f.number_field :charged_price, step: 0.01, placeholder: "Price ($)", class: "form-control #{'is-invalid' if line_f.object.errors[:charged_price].any?}" %>
+          <% if line_f.object.errors[:charged_price].any? %>
+            <div class="invalid-feedback d-block"><%= line_f.object.errors[:charged_price].join(", ") %></div>
+          <% end %>
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+          <% if line_f.object.persisted? %>
+            <div class="form-check">
+              <%= line_f.check_box :_destroy, class: "form-check-input" %>
+              <%= line_f.label :_destroy, "Remove", class: "form-check-label text-danger" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <small class="text-muted">Leave service blank to ignore line.</small>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+  <%= link_to "Cancel", repairs_path, class: "btn btn-outline-secondary" %>
+<% end %>

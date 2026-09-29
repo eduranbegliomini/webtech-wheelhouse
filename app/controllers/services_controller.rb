@@ -1,9 +1,52 @@
 class ServicesController < ApplicationController
+  before_action :set_service, only: [:show, :edit, :update, :destroy]
+
   def index
-    @services = Service.order(:name)
+    @services = Service.by_name
   end
 
   def show
+  end
+
+  def new
+    @service = Service.new
+  end
+
+  def create
+    @service = Service.new(service_params)
+    if @service.save
+      redirect_to @service, notice: "Service #{@service.name} was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @service.update(service_params)
+      redirect_to @service, notice: "Service #{@service.name} was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @service.destroy
+      redirect_to services_path, status: :see_other, notice: "Service #{@service.name} was deleted."
+    else
+      redirect_to @service, alert: @service.errors.full_messages.to_sentence
+    end
+  end
+
+  private
+
+  def set_service
     @service = Service.find(params[:id])
+  end
+
+  def service_params
+    params.expect(service: [:name, :price])
   end
 end

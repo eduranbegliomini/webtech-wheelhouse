@@ -1,5 +1,7 @@
 <h1>Staff Members</h1>
 
+<%= link_to "Add New Staff Member", new_employee_path, class: "btn btn-success mb-3" %>
+
 <% if @employees.any? %>
   <table class="table table-striped mt-4">
     <thead class="table-dark">

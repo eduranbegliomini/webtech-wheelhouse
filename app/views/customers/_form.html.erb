@@ -1,0 +1,27 @@
+<%= form_with model: @customer do |f| %>
+  <% if @customer.errors.any? %>
+    <div class="alert alert-danger">
+      <h5>Please fix the following <%= pluralize(@customer.errors.count, "error") %>:</h5>
+      <ul>
+        <% @customer.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: "form-control #{'is-invalid' if @customer.errors[:name].any?}" %>
+    <div class="invalid-feedback"><%= @customer.errors[:name].join(", ") %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :phone, class: "form-label" %>
+    <%= f.text_field :phone, class: "form-control #{'is-invalid' if @customer.errors[:phone].any?}" %>
+    <div class="invalid-feedback"><%= @customer.errors[:phone].join(", ") %></div>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+  <%= link_to "Cancel", customers_path, class: "btn btn-outline-secondary" %>
+<% end %>
