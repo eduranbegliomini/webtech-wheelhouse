@@ -45,6 +45,7 @@ class BikesController < ApplicationController
 
   def set_bike
     @bike = Bike.find(params[:id])
+    @repairs = @bike.repairs.includes(bike: :customer).newest_first
   end
 
   def bike_params

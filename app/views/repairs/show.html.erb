@@ -46,7 +46,7 @@
     <tfoot>
       <tr class="table-dark">
         <td><strong>Total Invoice</strong></td>
-        <td class="text-end"><strong><%= number_to_currency(@repair.repair_services.sum(&:charged_price)) %></strong></td>
+        <td class="text-end"><strong><%= number_to_currency(@repair.total) %></strong></td>
       </tr>
     </tfoot>
   </table>

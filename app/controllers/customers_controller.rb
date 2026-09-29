@@ -45,6 +45,7 @@ class CustomersController < ApplicationController
 
   def set_customer
     @customer = Customer.find(params[:id])
+    @bikes = @customer.bikes.includes(:customer).by_make_and_model
   end
 
   def customer_params

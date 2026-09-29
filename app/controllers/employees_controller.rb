@@ -45,6 +45,7 @@ class EmployeesController < ApplicationController
 
   def set_employee
     @employee = Employee.find(params[:id])
+    @repairs = @employee.repairs.includes(bike: :customer).newest_first
   end
 
   def employee_params
