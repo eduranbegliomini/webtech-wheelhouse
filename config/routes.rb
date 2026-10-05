@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   resources :employees
   resources :services
   resources :repairs
+  resources :attachments, only: [:destroy]
 end

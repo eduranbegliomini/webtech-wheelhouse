@@ -1,45 +1,74 @@
-<% content_for :title, "Repair ##{@repair.id}" %>
-
-<h1>Repair Ticket #<%= @repair.id %></h1>
-
-<div class="row mt-4">
-  <div class="col-md-6">
-    <div class="card mb-4">
-      <div class="card-header bg-dark text-white">Details</div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>Bike:</strong> <%= link_to "#{@repair.bike.make} #{@repair.bike.model}", bike_path(@repair.bike) %></li>
-        <li class="list-group-item"><strong>Customer:</strong> <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer) %></li>
-        <li class="list-group-item"><strong>Mechanic:</strong> <%= @repair.employee ? link_to(@repair.employee.name, employee_path(@repair.employee)) : "Unassigned" %></li>
-        <li class="list-group-item"><strong>State:</strong> <span class="badge bg-secondary"><%= @repair.state %></span></li>
-      </ul>
-    </div>
+<div class="row">
+  <div class="col-md-8">
+    <h1>Repair Ticket #<%= @repair.id %></h1>
+    <h3 class="text-muted">
+      <%= link_to "#{@repair.bike.make} #{@repair.bike.model}", bike_path(@repair.bike) %> 
+      (Owner: <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer) %>)
+    </h3>
   </div>
-  <div class="col-md-6">
-    <div class="card mb-4">
-      <div class="card-header bg-dark text-white">Timeline</div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>Promised On:</strong> <%= @repair.promised_on ? @repair.promised_on.to_fs(:long) : "Not set" %></li>
-        <li class="list-group-item"><strong>Handed Back At:</strong> <%= @repair.handed_back_at ? @repair.handed_back_at.to_fs(:long_ordinal) : "Not handed back yet" %></li>
-        <li class="list-group-item"><strong>Customer Answer:</strong> <%= @repair.customer_answer.presence || "None yet" %></li>
-      </ul>
-    </div>
+  <div class="col-md-4 text-end">
+    <h2><span class="badge bg-secondary"><%= @repair.state %></span></h2>
   </div>
 </div>
 
-<h3 class="mt-4">Services Charged</h3>
+<hr>
+
+<div class="row mb-4">
+  <div class="col-md-6">
+    <p><strong>Mechanic:</strong> <%= @repair.employee ? @repair.employee.name : "Unassigned" %></p>
+    <p><strong>Promised On:</strong> <%= @repair.promised_on ? @repair.promised_on.to_fs(:long) : "Not set" %></p>
+  </div>
+  <div class="col-md-6">
+    <p><strong>Handed Back At:</strong> <%= @repair.handed_back_at ? @repair.handed_back_at.to_fs(:long) : "Not yet" %></p>
+    <p><strong>Customer Answer:</strong> <%= @repair.customer_answer.presence || "None" %></p>
+  </div>
+</div>
+
+<!-- Novedad Lab 9: Diagnóstico -->
+<div class="card mb-4">
+  <div class="card-header bg-dark text-white fw-bold">Diagnosis</div>
+  <div class="card-body">
+    <% if @repair.diagnosis.present? %>
+      <%= @repair.diagnosis %>
+    <% else %>
+      <p class="text-muted mb-0">No diagnosis has been written for this repair.</p>
+    <% end %>
+  </div>
+</div>
+
+<!-- Novedad Lab 9: Fotos -->
+<h3 class="mt-4 mb-3">Intake Photos</h3>
+<% if @repair.intake_photos.attached? %>
+  <div class="d-flex flex-wrap gap-3 mb-5">
+    <% @repair.intake_photos.each do |photo| %>
+      <div class="card p-2 text-center" style="width: 250px;">
+        <!-- El link_to lleva al tamaño original de la foto -->
+        <%= link_to photo do %>
+          <%= image_tag photo.variant(:large), alt: "#{@repair.bike.make} #{@repair.bike.model} photo", class: "img-fluid rounded border mb-2" %>
+        <% end %>
+        <%= button_to "Remove Photo", attachment_path(photo), method: :delete, data: { turbo_confirm: "Are you sure you want to permanently delete this photo?" }, class: "btn btn-sm btn-outline-danger w-100" %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="alert alert-light border mb-5">No intake photos have been uploaded for this repair yet.</div>
+<% end %>
+
+<!-- Servicios (Ya lo tenías del Lab 8) -->
+<h3>Services Charged</h3>
 <% if @repair.repair_services.any? %>
-  <table class="table table-bordered mt-3">
-    <thead class="table-light">
+  <table class="table table-bordered table-striped mt-3">
+    <thead class="table-dark">
       <tr>
-        <th>Service Performed</th>
-        <th class="text-end">Amount Charged</th>
+        <th>Service</th>
+        <th class="text-end">Charged Price</th>
       </tr>
     </thead>
     <tbody>
-      <% @repair.repair_services.each do |rs| %>
+      <% @repair.repair_services.each do |line| %>
         <tr>
-          <td><%= link_to rs.service.name, service_path(rs.service) %></td>
-          <td class="text-end"><%= number_to_currency(rs.charged_price) %></td>
+          <td><%= line.service.name %></td>
+          <td class="text-end"><%= number_to_currency(line.charged_price) %></td>
         </tr>
       <% end %>
     </tbody>
@@ -51,10 +80,10 @@
     </tfoot>
   </table>
 <% else %>
-  <p>No services have been added to this repair yet.</p>
+  <p class="text-muted">No services have been added to this repair.</p>
 <% end %>
 
-<div class="mt-4 d-flex gap-2">
+<div class="mt-5 d-flex gap-2">
   <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-primary" %>
   <%= button_to "Delete", @repair, method: :delete, data: { turbo_confirm: "Are you sure you want to delete Repair ##{@repair.id}?" }, class: "btn btn-danger" %>
   <%= link_to "Back", repairs_path, class: "btn btn-outline-secondary" %>

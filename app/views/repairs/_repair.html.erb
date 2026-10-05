@@ -1,11 +1,46 @@
 <tr class="<%= 'table-danger' if repair.overdue? %>">
-  <td><%= link_to "Repair ID: #{repair.id}", repair_path(repair) %></td>
+  
+  <!-- Columna 1: Foto y ID -->
   <td>
-    <%= link_to "#{repair.bike.make} #{repair.bike.model}", bike_path(repair.bike) %> 
-    (Owner: <%= link_to repair.bike.customer.name, customer_path(repair.bike.customer) %>)
+    <div class="d-flex align-items-center">
+      <% if repair.intake_photos.attached? %>
+        <%= link_to repair_path(repair) do %>
+          <%= image_tag repair.intake_photos.first.variant(:thumb), alt: "#{repair.bike.make} #{repair.bike.model} repair", class: "img-thumbnail me-3", style: "width: 70px; height: 70px; object-fit: cover;" %>
+        <% end %>
+      <% else %>
+        <div class="img-thumbnail bg-light text-muted d-inline-flex align-items-center justify-content-center me-3" style="width: 70px; height: 70px; font-size: 0.7rem;">No Pic</div>
+      <% end %>
+      <%= link_to "Repair ID: #{repair.id}", repair_path(repair), class: "fw-bold" %>
+    </div>
   </td>
+
+  <!-- Columna 2: Bicicleta, Dueño y Diagnóstico -->
   <td>
+    <%= link_to "#{repair.bike.make} #{repair.bike.model}", bike_path(repair.bike), class: "fw-bold text-decoration-none" %>
+    <br>
+    <small class="text-muted fw-bold">Owner: <%= link_to repair.bike.customer.name, customer_path(repair.bike.customer), class: "text-muted" %></small>
+    <br>
+    <small class="text-muted">
+      <% if repair.diagnosis.present? %>
+        <%= repair.diagnosis.to_plain_text.truncate(50) %>
+      <% else %>
+        No diagnosis recorded.
+      <% end %>
+    </small>
+  </td>
+
+  <!-- Columna 3: Estado -->
+  <td class="align-middle">
     <span class="badge bg-secondary"><%= repair.state %></span>
   </td>
-  <td><%= repair.promised_on ? repair.promised_on.to_fs(:long) : "Not set" %></td>
+
+  <!-- Columna 4: Fecha Prometida -->
+  <td class="align-middle">
+    <% if repair.promised_on %>
+      <%= repair.promised_on.to_fs(:short) %>
+    <% else %>
+      <span class="text-muted">Not set</span>
+    <% end %>
+  </td>
+
 </tr>

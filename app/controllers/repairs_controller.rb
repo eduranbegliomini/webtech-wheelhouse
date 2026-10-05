@@ -2,7 +2,10 @@ class RepairsController < ApplicationController
   before_action :set_repair, only: [:show, :edit, :update, :destroy]
 
   def index
-    @repairs = Repair.includes(bike: :customer).newest_first
+    @repairs = Repair.includes(bike: :customer)
+                     .with_attached_intake_photos
+                     .with_rich_text_diagnosis
+                     .newest_first
   end
 
   def show
@@ -47,10 +50,13 @@ class RepairsController < ApplicationController
   private
 
   def set_repair
-    @repair = Repair.includes(:bike, repair_services: :service).find(params[:id])
+    @repair = Repair.includes(:bike, repair_services: :service)
+                    .with_attached_intake_photos
+                    .with_rich_text_diagnosis
+                    .find(params[:id])
   end
 
   def repair_params
-    params.expect(repair: [:bike_id, :employee_id, :state, :promised_on, :handed_back_at, :customer_answer, repair_services_attributes: [:id, :service_id, :charged_price, :_destroy]])
+    params.expect(repair: [:bike_id, :employee_id, :state, :promised_on, :handed_back_at, :customer_answer, :diagnosis, intake_photos: [], repair_services_attributes: [:id, :service_id, :charged_price, :_destroy]])
   end
 end

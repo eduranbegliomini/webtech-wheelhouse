@@ -46,7 +46,31 @@
     <div class="invalid-feedback"><%= @repair.errors[:customer_answer].join(", ") %></div>
   </div>
 
-  <h4>Services Charged</h4>
+  <!-- Novedad Lab 9: El diagnóstico con ActionText -->
+  <div class="mb-4">
+    <%= f.label :diagnosis, "Diagnosis (Rich Text)", class: "form-label fw-bold" %>
+    <%= f.rich_text_area :diagnosis, class: "bg-white form-control" %>
+  </div>
+
+  <!-- Novedad Lab 9: Las fotos con ActiveStorage -->
+  <div class="mb-4 bg-light p-3 border rounded">
+    <%= f.label :intake_photos, "Upload Intake Photos (JPEG or PNG, Max 5MB)", class: "form-label fw-bold" %>
+    
+    <%# Este bloque mágico asegura que no perdamos las fotos viejas al editar el form %>
+    <% if @repair.intake_photos.attached? %>
+      <% @repair.intake_photos.each do |photo| %>
+        <%= f.hidden_field :intake_photos, multiple: true, value: photo.signed_id %>
+      <% end %>
+      <p class="text-success small mb-2"><%= pluralize(@repair.intake_photos.count, 'photo') %> already attached.</p>
+    <% end %>
+
+    <%= f.file_field :intake_photos, multiple: true, accept: "image/png, image/jpeg", class: "form-control #{'is-invalid' if @repair.errors[:intake_photos].any?}" %>
+    <% if @repair.errors[:intake_photos].any? %>
+      <div class="invalid-feedback d-block"><%= @repair.errors[:intake_photos].join(", ") %></div>
+    <% end %>
+  </div>
+
+  <h4 class="mt-4">Services Charged</h4>
   <div class="card p-3 mb-4 bg-light">
     <%= f.fields_for :repair_services do |line_f| %>
       <div class="row mb-2">
@@ -57,9 +81,6 @@
         <div class="col-md-4">
           <%= line_f.label :charged_price, "Price", class: "form-label visually-hidden" %>
           <%= line_f.number_field :charged_price, step: 0.01, placeholder: "Price ($)", class: "form-control #{'is-invalid' if line_f.object.errors[:charged_price].any?}" %>
-          <% if line_f.object.errors[:charged_price].any? %>
-            <div class="invalid-feedback d-block"><%= line_f.object.errors[:charged_price].join(", ") %></div>
-          <% end %>
         </div>
         <div class="col-md-2 d-flex align-items-center">
           <% if line_f.object.persisted? %>
@@ -71,7 +92,6 @@
         </div>
       </div>
     <% end %>
-    <small class="text-muted">Leave service blank to ignore line.</small>
   </div>
 
   <%= f.submit class: "btn btn-primary" %>

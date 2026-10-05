@@ -17,9 +17,17 @@ class Repair < ApplicationRecord
     picked_up: "Picked Up"
   }
 
+  has_rich_text :diagnosis
+  
+  has_many_attached :intake_photos do |attachable|
+    attachable.variant :thumb, resize_to_fill: [100, 100]
+    attachable.variant :large, resize_to_limit: [600, 600]
+  end
+
   validates :state, presence: true
   validate :dates_are_logical
   validate :status_logic
+  validate :acceptable_intake_photos 
 
   scope :open_repairs, -> { where(handed_back_at: nil) }
   scope :overdue, -> { open_repairs.where("promised_on < ?", Date.current) }
@@ -34,6 +42,22 @@ class Repair < ApplicationRecord
   end
 
   private
+
+  def acceptable_intake_photos
+    return unless intake_photos.attached?
+    
+    acceptable_types = ["image/jpeg", "image/png"]
+    
+    intake_photos.each do |photo|
+      unless photo.byte_size <= 5.megabytes
+        errors.add(:intake_photos, "'#{photo.filename}' is too big (limit is 5MB)")
+      end
+
+      unless acceptable_types.include?(photo.content_type)
+        errors.add(:intake_photos, "'#{photo.filename}' must be a JPEG or PNG")
+      end
+    end
+  end
 
   def dates_are_logical
     arrival_date = created_at&.to_date || Date.current
