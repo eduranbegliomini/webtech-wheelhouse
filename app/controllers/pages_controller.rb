@@ -7,4 +7,6 @@ class PagesController < ApplicationController
 
   def about
   end
+
+  allow_unauthenticated_access only: [:index, :show] 
 end

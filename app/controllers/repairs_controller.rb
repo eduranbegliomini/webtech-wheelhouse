@@ -2,7 +2,7 @@ class RepairsController < ApplicationController
   before_action :set_repair, only: [:show, :edit, :update, :destroy]
 
   def index
-    @repairs = Repair.includes(bike: :customer)
+    @repairs = Repair.includes(:bike, :taken_in_by, repair_services: :service).newest_first
                      .with_attached_intake_photos
                      .with_rich_text_diagnosis
                      .newest_first
@@ -18,6 +18,7 @@ class RepairsController < ApplicationController
 
   def create
     @repair = Repair.new(repair_params)
+    @repair.taken_in_by = Current.user
     if @repair.save
       redirect_to @repair, notice: "Repair ##{@repair.id} was successfully created."
     else

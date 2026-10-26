@@ -24,7 +24,6 @@
   </div>
 </div>
 
-<!-- Novedad Lab 9: Diagnóstico -->
 <div class="card mb-4">
   <div class="card-header bg-dark text-white fw-bold">Diagnosis</div>
   <div class="card-body">
@@ -36,7 +35,6 @@
   </div>
 </div>
 
-<!-- Novedad Lab 9: Fotos -->
 <h3 class="mt-4 mb-3">Intake Photos</h3>
 <% if @repair.intake_photos.attached? %>
   <div class="d-flex flex-wrap gap-3 mb-5">
@@ -54,7 +52,6 @@
   <div class="alert alert-light border mb-5">No intake photos have been uploaded for this repair yet.</div>
 <% end %>
 
-<!-- Servicios (Ya lo tenías del Lab 8) -->
 <h3>Services Charged</h3>
 <% if @repair.repair_services.any? %>
   <table class="table table-bordered table-striped mt-3">
@@ -88,3 +85,11 @@
   <%= button_to "Delete", @repair, method: :delete, data: { turbo_confirm: "Are you sure you want to delete Repair ##{@repair.id}?" }, class: "btn btn-danger" %>
   <%= link_to "Back", repairs_path, class: "btn btn-outline-secondary" %>
 </div>
+
+<p><strong>Taken in by:</strong> 
+    <% if @repair.taken_in_by %>
+      <%= @repair.taken_in_by.employee&.name || @repair.taken_in_by.email_address %>
+    <% else %>
+      Unknown
+    <% end %>
+  </p>

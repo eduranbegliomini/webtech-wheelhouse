@@ -10,7 +10,6 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <!-- Navbar Gris -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container">
         <%= link_to "Wheelhouse", root_path, class: "navbar-brand" %>
@@ -19,18 +18,28 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
-            <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %></li>
-            <li class="nav-item"><%= link_to "Services", services_path, class: "nav-link #{'active' if current_page?(services_path)}" %></li>
-            <li class="nav-item"><%= link_to "Customers", customers_path, class: "nav-link #{'active' if current_page?(customers_path)}" %></li>
-            <li class="nav-item"><%= link_to "Bikes", bikes_path, class: "nav-link #{'active' if current_page?(bikes_path)}" %></li>
-            <li class="nav-item"><%= link_to "Repairs", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %></li>
-            <li class="nav-item"><%= link_to "Staff", employees_path, class: "nav-link #{'active' if current_page?(employees_path)}" %></li>
+            <li class="nav-item"><%= link_to "Price List", services_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "About", about_path, class: "nav-link" if respond_to?(:about_path) %></li>
+          </ul>
+          
+          <ul class="navbar-nav">
+            <% if authenticated? %>
+              <li class="nav-item d-flex align-items-center me-3 text-secondary">
+                <%= Current.user.employee&.name || Current.user.email_address %> (<%= Current.user.role %>)
+              </li>
+              <li class="nav-item">
+                <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-outline-danger btn-sm mt-1" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Sign in", new_session_path, class: "btn btn-outline-primary btn-sm mt-1" %>
+              </li>
+            <% end %>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- Contenido y Mensajes Flash -->
     <div class="container">
       <% flash.each do |type, message| %>
         <div class="alert alert-<%= type == 'alert' ? 'danger' : 'success' %> alert-dismissible fade show" role="alert">

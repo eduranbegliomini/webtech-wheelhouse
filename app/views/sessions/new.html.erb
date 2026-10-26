@@ -1,0 +1,28 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-4">
+    <h2 class="mb-4">Sign In</h2>
+    
+    <% if alert = flash[:alert] %>
+      <div class="alert alert-danger"><%= alert %></div>
+    <% end %>
+
+    <%= form_with url: session_path, class: "card p-4 shadow-sm" do |f| %>
+      <div class="mb-3">
+        <%= f.label :email_address, "Email", class: "form-label" %>
+        <%= f.email_field :email_address, required: true, autofocus: true, value: params[:email_address], class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password, class: "form-label" %>
+        <%= f.password_field :password, required: true, autocomplete: "current-password", class: "form-control" %>
+      </div>
+
+      <%= f.submit "Sign in", class: "btn btn-primary w-100" %>
+    <% end %>
+
+    <div class="mt-3 text-center">
+      <%= link_to "Forgot password?", new_password_path %> | 
+      <%= link_to "Sign up", new_registration_path %>
+    </div>
+  </div>
+</div>

@@ -16,3 +16,8 @@ This document contains three critical questions not answered by the initial desc
 * **Question:** Is a repair strictly assigned to a single mechanic for the entire process, or do all mechanics share a pool of work and step in whenever needed?
 * **Assumption made:** I assumed the workshop operates as a shared pool. Whoever is available picks up the phone or the bike. 
 * **What would change:** If repairs were strictly assigned to individuals, we would need to add a `Mechanics` (or `Users`) table, and add a `mechanic_id` foreign key to the `Repairs` table to track who is responsible for it.
+
+## 4. Default Role
+- **Question:** Which role should be assigned by default to a newly signed-up account?
+- **Decision made:** The default role is `counter`. 
+- **Reasoning:** The counter role has the fewest permissions. They can register incoming bikes but cannot act as mechanics (modify technical diagnosis) or owners (manage the shop). Granting this role by default follows the Principle of Least Privilege, minimizing risk if an unverified account is created.

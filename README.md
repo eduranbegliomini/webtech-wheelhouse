@@ -64,3 +64,24 @@ curl http://localhost:3000/api/v1/services
 ```bash
 curl -H "Authorization: Bearer your_local_secret_token" http://localhost:3000/api/v1/repairs
 ```
+
+# Wheelhouse - Accounts (Lab 11)
+
+(Mantén la descripción de tu Lab 10 aquí)
+
+## System Requirements
+- libvips (Required for Active Storage image processing)
+- PostgreSQL
+
+## Development Emails
+In development, no real emails are sent out. 
+All emails (Password Resets, Welcome Emails) are written directly to your local file system. 
+You can find and read them in the following folder:
+`tmp/mails/`
+
+## Test Accounts (Seed Data)
+The database seed provides the following accounts for testing in development:
+- **Owner:** `owner@wheelhouse.cl` / `Wheelhouse2024!`
+- **Mechanic:** `mechanic@wheelhouse.cl` / `Mechanic2024!`
+- **Counter:** `counter@wheelhouse.cl` / `Counter2024!`
+- **No Employee:** `newguy@wheelhouse.cl` / `Wheelhouse2024!`

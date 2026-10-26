@@ -1,6 +1,7 @@
 class Repair < ApplicationRecord
   belongs_to :bike
   belongs_to :employee, optional: true
+  belongs_to :taken_in_by, class_name: "User", optional: true
   has_many :repair_services, dependent: :destroy
   has_many :services, through: :repair_services
 

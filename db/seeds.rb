@@ -51,8 +51,14 @@ b10 = Bike.create!(customer_id: customers[8].id, make: "Scott", model: "Spark", 
 b11 = Bike.create!(customer_id: customers[1].id, make: "Yeti", model: "SB130", color: "Turquoise", serial_number: "YT666777")
 b12 = Bike.create!(customer_id: customers[2].id, make: "Pinarello", model: "Dogma", color: "Red", serial_number: "PN888999")
 
-r1 = Repair.create!(bike_id: b1.id, employee_id: m1.id, state: "In Progress", promised_on: 2.days.ago.to_date)
-RepairService.create!(repair_id: r1.id, service_id: s1.id, charged_price: s1.price - 10.0) # Descuento exigido!
+r1 = Repair.create!(
+  bike_id: b1.id, 
+  employee_id: m1.id, 
+  state: "In Progress", 
+  promised_on: 2.days.from_now.to_date, 
+  customer_answer: "Approved"          
+)
+RepairService.create!(repair_id: r1.id, service_id: s1.id, charged_price: s1.price - 10.0) 
 
 r2 = Repair.create!(bike_id: b2.id, employee_id: m2.id, state: "Picked Up", promised_on: 1.day.ago.to_date, handed_back_at: 1.day.ago, customer_answer: "Approved", created_at: 1.day.ago.beginning_of_day + 10.hours)
 RepairService.create!(repair_id: r2.id, service_id: s3.id, charged_price: s3.price)
@@ -96,3 +102,39 @@ RepairService.create!(repair_id: r14.id, service_id: s15.id, charged_price: s15.
 
 r15 = Repair.create!(bike_id: b2.id, employee_id: m1.id, state: "Estimating", promised_on: Date.current + 6.days)
 RepairService.create!(repair_id: r15.id, service_id: s17.id, charged_price: s17.price)
+
+puts "Seeding Users..."
+test_password = "Wheelhouse2024!"
+
+owner_emp = Employee.find_or_create_by!(name: "Alex Rivera")
+User.find_or_create_by!(email_address: "owner@wheelhouse.cl") do |u|
+  u.employee = owner_emp
+  u.role = "owner"
+  u.password = test_password
+end
+
+mech_emp = Employee.find_or_create_by!(name: "Jordan Lee")
+User.find_or_create_by!(email_address: "mechanic@wheelhouse.cl") do |u|
+  u.employee = mech_emp
+  u.role = "mechanic"
+  u.password = "Mechanic2024!"
+end
+
+counter_emp = Employee.find_or_create_by!(name: "Sam Taylor")
+User.find_or_create_by!(email_address: "counter@wheelhouse.cl") do |u|
+  u.employee = counter_emp
+  u.role = "counter"
+  u.password = "Counter2024!"
+end
+
+User.find_or_create_by!(email_address: "newguy@wheelhouse.cl") do |u|
+  u.role = "counter"
+  u.password = test_password
+end
+
+puts "Assigning repairs to users..."
+users = User.all
+Repair.all.each_with_index do |repair, index|
+  next if index < 2 
+  repair.update_column(:taken_in_by_id, users.sample.id)
+end
