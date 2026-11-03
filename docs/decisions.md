@@ -21,3 +21,8 @@ This document contains three critical questions not answered by the initial desc
 - **Question:** Which role should be assigned by default to a newly signed-up account?
 - **Decision made:** The default role is `counter`. 
 - **Reasoning:** The counter role has the fewest permissions. They can register incoming bikes but cannot act as mechanics (modify technical diagnosis) or owners (manage the shop). Granting this role by default follows the Principle of Least Privilege, minimizing risk if an unverified account is created.
+
+## 5. Public Actions (Pundit Skipped)
+- `ServicesController#index` and `#show`: Public price list needs to be available to visitors and the external frontend without session.
+- `RegistrationsController`, `SessionsController`, `PasswordsController`: Authentication mechanisms must bypass Pundit logic.
+- `ApiController`: Token-based API access handles its own specific auth flow.

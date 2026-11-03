@@ -2,8 +2,18 @@
   <div class="col-md-8">
     <h1>Repair Ticket #<%= @repair.id %></h1>
     <h3 class="text-muted">
-      <%= link_to "#{@repair.bike.make} #{@repair.bike.model}", bike_path(@repair.bike) %> 
-      (Owner: <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer) %>)
+      <% if policy(Bike).show? %>
+        <%= link_to "#{@repair.bike.make} #{@repair.bike.model}", bike_path(@repair.bike) %> 
+      <% else %>
+        <%= "#{@repair.bike.make} #{@repair.bike.model}" %>
+      <% end %>
+      (Owner: 
+      <% if policy(Customer).show? %>
+        <%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer) %>
+      <% else %>
+        <%= @repair.bike.customer.name %>
+      <% end %>
+      )
     </h3>
   </div>
   <div class="col-md-4 text-end">
@@ -40,11 +50,12 @@
   <div class="d-flex flex-wrap gap-3 mb-5">
     <% @repair.intake_photos.each do |photo| %>
       <div class="card p-2 text-center" style="width: 250px;">
-        <!-- El link_to lleva al tamaño original de la foto -->
         <%= link_to photo do %>
           <%= image_tag photo.variant(:large), alt: "#{@repair.bike.make} #{@repair.bike.model} photo", class: "img-fluid rounded border mb-2" %>
         <% end %>
-        <%= button_to "Remove Photo", attachment_path(photo), method: :delete, data: { turbo_confirm: "Are you sure you want to permanently delete this photo?" }, class: "btn btn-sm btn-outline-danger w-100" %>
+        <% if policy(@repair).update? %>
+          <%= button_to "Remove Photo", attachment_path(photo), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger w-100" %>
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -81,15 +92,19 @@
 <% end %>
 
 <div class="mt-5 d-flex gap-2">
-  <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-primary" %>
-  <%= button_to "Delete", @repair, method: :delete, data: { turbo_confirm: "Are you sure you want to delete Repair ##{@repair.id}?" }, class: "btn btn-danger" %>
+  <% if policy(@repair).edit? %>
+    <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-primary" %>
+  <% end %>
+  <% if policy(@repair).destroy? %>
+    <%= button_to "Delete", @repair, method: :delete, data: { turbo_confirm: "Are you sure you want to delete Repair ##{@repair.id}?" }, class: "btn btn-danger" %>
+  <% end %>
   <%= link_to "Back", repairs_path, class: "btn btn-outline-secondary" %>
 </div>
 
 <p><strong>Taken in by:</strong> 
-    <% if @repair.taken_in_by %>
-      <%= @repair.taken_in_by.employee&.name || @repair.taken_in_by.email_address %>
-    <% else %>
-      Unknown
-    <% end %>
-  </p>
+  <% if @repair.taken_in_by %>
+    <%= @repair.taken_in_by.employee&.name || @repair.taken_in_by.email_address %>
+  <% else %>
+    Unknown
+  <% end %>
+</p>

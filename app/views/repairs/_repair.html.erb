@@ -1,6 +1,5 @@
 <tr class="<%= 'table-danger' if repair.overdue? %>">
   
-  <!-- Columna 1: Foto y ID -->
   <td>
     <div class="d-flex align-items-center">
       <% if repair.intake_photos.attached? %>
@@ -14,11 +13,20 @@
     </div>
   </td>
 
-  <!-- Columna 2: Bicicleta, Dueño y Diagnóstico -->
   <td>
-    <%= link_to "#{repair.bike.make} #{repair.bike.model}", bike_path(repair.bike), class: "fw-bold text-decoration-none" %>
+    <% if policy(Bike).show? %>
+      <%= link_to "#{repair.bike.make} #{repair.bike.model}", bike_path(repair.bike), class: "fw-bold text-decoration-none" %>
+    <% else %>
+      <span class="fw-bold"><%= "#{repair.bike.make} #{repair.bike.model}" %></span>
+    <% end %>
     <br>
-    <small class="text-muted fw-bold">Owner: <%= link_to repair.bike.customer.name, customer_path(repair.bike.customer), class: "text-muted" %></small>
+    <small class="text-muted fw-bold">Owner: 
+      <% if policy(Customer).show? %>
+        <%= link_to repair.bike.customer.name, customer_path(repair.bike.customer), class: "text-muted" %>
+      <% else %>
+        <%= repair.bike.customer.name %>
+      <% end %>
+    </small>
     <br>
     <small class="text-muted">
       <% if repair.diagnosis.present? %>
@@ -29,12 +37,10 @@
     </small>
   </td>
 
-  <!-- Columna 3: Estado -->
   <td class="align-middle">
     <span class="badge bg-secondary"><%= repair.state %></span>
   </td>
 
-  <!-- Columna 4: Fecha Prometida -->
   <td class="align-middle">
     <% if repair.promised_on %>
       <%= repair.promised_on.to_fs(:short) %>

@@ -103,38 +103,41 @@ RepairService.create!(repair_id: r14.id, service_id: s15.id, charged_price: s15.
 r15 = Repair.create!(bike_id: b2.id, employee_id: m1.id, state: "Estimating", promised_on: Date.current + 6.days)
 RepairService.create!(repair_id: r15.id, service_id: s17.id, charged_price: s17.price)
 
-puts "Seeding Users..."
-test_password = "Wheelhouse2024!"
+puts "Seeding Users and Specific Repairs..."
+test_pw = "Wheelhouse2024!"
 
 owner_emp = Employee.find_or_create_by!(name: "Alex Rivera")
-User.find_or_create_by!(email_address: "owner@wheelhouse.cl") do |u|
-  u.employee = owner_emp
-  u.role = "owner"
-  u.password = test_password
-end
+u_owner = User.find_or_initialize_by(employee: owner_emp)
+u_owner.update!(email_address: "owner@wheelhouse.cl", role: "owner", password: test_pw)
 
-mech_emp = Employee.find_or_create_by!(name: "Jordan Lee")
-User.find_or_create_by!(email_address: "mechanic@wheelhouse.cl") do |u|
-  u.employee = mech_emp
-  u.role = "mechanic"
-  u.password = "Mechanic2024!"
-end
+mech1_emp = Employee.find_or_create_by!(name: "Jordan Lee")
+u_mech1 = User.find_or_initialize_by(employee: mech1_emp)
+u_mech1.update!(email_address: "mechanic1@wheelhouse.cl", role: "mechanic", password: test_pw)
 
-counter_emp = Employee.find_or_create_by!(name: "Sam Taylor")
-User.find_or_create_by!(email_address: "counter@wheelhouse.cl") do |u|
-  u.employee = counter_emp
-  u.role = "counter"
-  u.password = "Counter2024!"
-end
+mech2_emp = Employee.find_or_create_by!(name: "Sam Taylor")
+u_mech2 = User.find_or_initialize_by(employee: mech2_emp)
+u_mech2.update!(email_address: "mechanic2@wheelhouse.cl", role: "mechanic", password: test_pw)
 
-User.find_or_create_by!(email_address: "newguy@wheelhouse.cl") do |u|
-  u.role = "counter"
-  u.password = test_password
-end
+counter_emp = Employee.find_or_create_by!(name: "Casey Smith")
+u_counter = User.find_or_initialize_by(employee: counter_emp)
+u_counter.update!(email_address: "counter@wheelhouse.cl", role: "counter", password: test_pw)
 
-puts "Assigning repairs to users..."
+u_newguy = User.find_or_initialize_by(email_address: "newguy@wheelhouse.cl")
+u_newguy.update!(employee: nil, role: "counter", password: test_pw)
+
+puts "Assigning repairs precisely..."
 users = User.all
-Repair.all.each_with_index do |repair, index|
-  next if index < 2 
-  repair.update_column(:taken_in_by_id, users.sample.id)
+repairs = Repair.order(:id).to_a
+
+repairs.each_with_index do |repair, index|
+  repair.update_column(:taken_in_by_id, index < 2 ? nil : users.sample.id)
+  repair.update_column(:employee_id, nil)
 end
+
+repairs[0].update_columns(employee_id: mech1_emp.id, state: "Picked Up", customer_answer: "Approved")
+repairs[1].update_columns(employee_id: mech1_emp.id, state: "In Progress", customer_answer: "Approved")
+
+repairs[2].update_columns(employee_id: mech2_emp.id, state: "Picked Up", customer_answer: "Approved")
+repairs[3].update_columns(employee_id: mech2_emp.id, state: "In Progress", customer_answer: "Approved")
+
+repairs[4].update_columns(employee_id: nil, state: "Registered")

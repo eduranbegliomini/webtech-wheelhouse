@@ -68,3 +68,9 @@ group :test do
 end
 
 gem "rack-cors", "~> 3.0"
+
+gem "pundit"
+
+group :development, :test do
+  gem "brakeman", require: false
+end

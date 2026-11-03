@@ -23,7 +23,13 @@
 <% end %>
 
 <div class="mt-4 d-flex gap-2">
-  <%= link_to "Edit", edit_employee_path(@employee), class: "btn btn-primary" %>
-  <%= button_to "Delete", @employee, method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{@employee.name}?" }, class: "btn btn-danger" %>
+  <% if policy(@employee).edit? %>
+    <%= link_to "Edit", edit_employee_path(@employee) %>
+  <% end %>
+
+  <% if policy(@employee).destroy? %>
+    <%= button_to "Delete", @employee, method: :delete %>
+  <% end %>
+  
   <%= link_to "Back", employees_path, class: "btn btn-outline-secondary" %>
 </div>

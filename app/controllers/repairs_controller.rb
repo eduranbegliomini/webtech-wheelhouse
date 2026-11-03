@@ -2,62 +2,56 @@ class RepairsController < ApplicationController
   before_action :set_repair, only: [:show, :edit, :update, :destroy]
 
   def index
-    @repairs = Repair.includes(:bike, :taken_in_by, repair_services: :service).newest_first
-                     .with_attached_intake_photos
-                     .with_rich_text_diagnosis
-                     .newest_first
+    @repairs = policy_scope(Repair).includes(:bike, :taken_in_by, repair_services: :service).newest_first
   end
 
   def show
+    authorize @repair
   end
 
   def new
-    @repair = Repair.new(bike_id: params[:bike_id])
-    3.times { @repair.repair_services.build }
+    @repair = Repair.new
+    authorize @repair
   end
 
   def create
     @repair = Repair.new(repair_params)
     @repair.taken_in_by = Current.user
+    authorize @repair
+
     if @repair.save
-      redirect_to @repair, notice: "Repair ##{@repair.id} was successfully created."
+      redirect_to @repair, notice: "Repair was successfully created."
     else
-      3.times { @repair.repair_services.build }
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    3.times { @repair.repair_services.build }
+    authorize @repair
   end
 
   def update
+    authorize @repair
     if @repair.update(repair_params)
-      redirect_to @repair, notice: "Repair ##{@repair.id} was successfully updated."
+      redirect_to @repair, notice: "Repair was successfully updated."
     else
-      3.times { @repair.repair_services.build }
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @repair.destroy
-      redirect_to repairs_path, status: :see_other, notice: "Repair ##{@repair.id} was deleted."
-    else
-      redirect_to @repair, alert: @repair.errors.full_messages.to_sentence
-    end
+    authorize @repair
+    @repair.destroy
+    redirect_to repairs_url, notice: "Repair was successfully destroyed."
   end
 
   private
 
   def set_repair
-    @repair = Repair.includes(:bike, repair_services: :service)
-                    .with_attached_intake_photos
-                    .with_rich_text_diagnosis
-                    .find(params[:id])
+    @repair = Repair.find(params[:id])
   end
 
   def repair_params
-    params.expect(repair: [:bike_id, :employee_id, :state, :promised_on, :handed_back_at, :customer_answer, :diagnosis, intake_photos: [], repair_services_attributes: [:id, :service_id, :charged_price, :_destroy]])
+    params.require(:repair).permit(policy(@repair || Repair).permitted_attributes)
   end
 end

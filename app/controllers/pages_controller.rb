@@ -1,12 +1,9 @@
 class PagesController < ApplicationController
-  def home
-  end
+  allow_unauthenticated_access
 
-  def visiting
-  end
+  skip_after_action :verify_authorized
 
   def about
   end
-
-  allow_unauthenticated_access only: [:index, :show] 
+  
 end

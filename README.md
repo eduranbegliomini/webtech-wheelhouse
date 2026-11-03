@@ -80,8 +80,8 @@ You can find and read them in the following folder:
 `tmp/mails/`
 
 ## Test Accounts (Seed Data)
-The database seed provides the following accounts for testing in development:
-- **Owner:** `owner@wheelhouse.cl` / `Wheelhouse2024!`
-- **Mechanic:** `mechanic@wheelhouse.cl` / `Mechanic2024!`
-- **Counter:** `counter@wheelhouse.cl` / `Counter2024!`
-- **No Employee:** `newguy@wheelhouse.cl` / `Wheelhouse2024!`
+The database seed provides the following accounts. See [docs/permissions.md](./docs/permissions.md) for full details on what each role can do.
+- **Owner:** `owner@wheelhouse.cl` / `Wheelhouse2024!` (Full access)
+- **Mechanic 1:** `mechanic1@wheelhouse.cl` / `Wheelhouse2024!` (Reads & Edits only assigned repairs)
+- **Mechanic 2:** `mechanic2@wheelhouse.cl` / `Wheelhouse2024!` (Reads & Edits only assigned repairs)
+- **Counter:** `counter@wheelhouse.cl` / `Wheelhouse2024!` (Cannot delete repairs or access mechanics' handed-back jobs)

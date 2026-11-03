@@ -2,43 +2,46 @@ class BikesController < ApplicationController
   before_action :set_bike, only: [:show, :edit, :update, :destroy]
 
   def index
-    @bikes = Bike.includes(:customer).by_make_and_model
+    authorize Bike
+    @bikes = policy_scope(Bike)
   end
 
   def show
-    @repairs = @bike.repairs.includes(bike: :customer)
-                            .with_attached_intake_photos
-                            .with_rich_text_diagnosis
-                            .newest_first
+    authorize @bike
   end
 
   def new
-    @bike = Bike.new(customer_id: params[:customer_id])
+    @bike = Bike.new
+    authorize @bike
   end
 
   def create
     @bike = Bike.new(bike_params)
+    authorize @bike
     if @bike.save
-      redirect_to @bike, notice: "Bike #{@bike.serial_number} was successfully created."
+      redirect_to @bike, notice: "Bike was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    authorize @bike
   end
 
   def update
+    authorize @bike
     if @bike.update(bike_params)
-      redirect_to @bike, notice: "Bike #{@bike.serial_number} was successfully updated."
+      redirect_to @bike, notice: "Bike was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    authorize @bike
     if @bike.destroy
-      redirect_to bikes_path, status: :see_other, notice: "Bike #{@bike.serial_number} was deleted."
+      redirect_to bikes_path, status: :see_other, notice: "Bike was successfully deleted."
     else
       redirect_to @bike, alert: @bike.errors.full_messages.to_sentence
     end
